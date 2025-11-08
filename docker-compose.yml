@@ -1,0 +1,37 @@
+services:
+  web:
+    build: ./services/web
+    volumes:
+      - ./services/web/:/usr/src/app/
+    ports:
+      - "8080:5000"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  k6:
+    image: grafana/k6:latest
+    entrypoint: ["k6", "run", "/scripts/performance-test.js"]
+    volumes:
+      - ./k6:/scripts
+      - ./k6/results:/results
+
+volumes:
+  postgres_data:
+  redis_data:
