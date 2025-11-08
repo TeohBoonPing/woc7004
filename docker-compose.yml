@@ -3,6 +3,7 @@ services:
     build: ./services/web
     volumes:
       - ./services/web/:/usr/src/app/
+      - ./k6:/usr/src/app/k6
     ports:
       - "8080:5000"
     env_file:
@@ -28,6 +29,20 @@ services:
   k6:
     image: grafana/k6:latest
     entrypoint: ["k6", "run", "/scripts/performance-test.js"]
+    volumes:
+      - ./k6:/scripts
+      - ./k6/results:/results
+
+  k6_db:
+    image: grafana/k6:latest
+    entrypoint: ["k6", "run", "/scripts/performance-db.js"]
+    volumes:
+      - ./k6:/scripts
+      - ./k6/results:/results
+
+  k6_redis:
+    image: grafana/k6:latest
+    entrypoint: ["k6", "run", "/scripts/performance-redis.js"]
     volumes:
       - ./k6:/scripts
       - ./k6/results:/results
