@@ -1,9 +1,0 @@
-Metric,DB-only,Redis Cache,Diff (% faster),Description
-Total User Requests,5000,5000,-,Total number of URL shortening or retrieval requests sent by users during the test
-Total Time Performance,30s,30s,-,Total duration of the test scenario simulating user traffic
-Avg Latency (ms),2.17,1.31,+39.8%,"Average time taken to shorten or retrieve a URL; shows how much faster Redis serves requests from cache vs database, reducing user wait time"
-Median Latency (ms),1.89,0.98,+47.9%,"Median request time; using Redis means more requests are served faster, improving perceived performance for most users"
-p(90) Latency (ms),2.95,2.19,+25.9%,"90th percentile latency: Redis reduces slower request times, making the system more responsive even under high load"
-p(95) Latency (ms),3.37,2.67,+20.9%,"95th percentile latency: Shows that even the slowest requests benefit from Redis cache, improving reliability"
-Requests to Database,5000,0,-,"Number of requests that actually hit the database; Redis serves cached requests directly, reducing database load and saving compute resources"
-Overall Performance,-,-,+33.6%,"Average % improvement across Avg, Median, p90, and p95 latency metrics, showing overall performance gain when using Redis"
