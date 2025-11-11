@@ -28,13 +28,17 @@ energy-baseline:
 	$(COMPOSE_CMD) exec web python codecarbon/baseline_energy.py
 
 energy-db:
-	# Start energy tracking (run this in separate terminal for clearer logs) then run k6_db
-	$(COMPOSE_CMD) exec -e K6_SERVICE=k6_db web python codecarbon/energy_run.py & \
+	# Run DB-only k6, then parse energy summary
 	$(COMPOSE_CMD) run --rm k6_db
+	$(COMPOSE_CMD) exec -e K6_SERVICE=k6_db web python codecarbon/k6_energy.py
 
 energy-redis:
 	$(COMPOSE_CMD) run --rm k6_redis
 	$(COMPOSE_CMD) exec -e K6_SERVICE=k6_redis web python codecarbon/k6_energy.py
+
+energy-compare:
+	# Compare DB vs Redis with baseline and write a CSV + JSON summary
+	$(COMPOSE_CMD) exec web python codecarbon/compare_energy.py
 
 which-compose:
 	@echo Using compose runner: $(COMPOSE_CMD)
