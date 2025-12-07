@@ -15,12 +15,37 @@ services:
 
   db:
     image: postgres:13-alpine
+    container_name: postgres   
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env
     ports:
       - "5432:5432"
+    restart: unless-stopped    
+  # --------------------------------------
+  # AUTO-START SIDE CAR FOR POSTGRES
+  # --------------------------------------
+  pg_autostart:
+    image: alpine
+    container_name: pg_autostart
+    command:
+      - /bin/sh
+      - -c
+      - |
+        apk add --no-cache net-tools docker-cli >/dev/null &&
+        echo 'Postgres autostart watcher running...' &&
+        while true; do
+          # Check if any process is attempting a connection to port 5432
+          if netstat -tn 2>/dev/null | grep ':5432' | grep SYN_SENT >/dev/null; then
+            echo 'Connection attempt detected → starting Postgres...'
+            docker start postgres >/dev/null 2>&1 || true
+          fi
+          sleep 1
+        done
+    network_mode: host  
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   redis:
     image: redis:7-alpine
