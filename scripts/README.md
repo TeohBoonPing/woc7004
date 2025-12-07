@@ -26,8 +26,8 @@ chmod +x scripts/pg-idle-stop.sh
 
 2. Set required environment variables (or configure in docker-compose):
 ```bash
-export POSTGRES_USER=your_user
-export POSTGRES_DB=your_database
+export POSTGRES_USER=shortener
+export POSTGRES_DB=shortener_dev
 ```
 
 3. Test the script manually:
