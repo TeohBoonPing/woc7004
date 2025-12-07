@@ -8,6 +8,13 @@ This project provides a simple setup to compare the performance of Redis caching
 - Make
 - K6 runs inside a container (no local install required)
 
+## Project Structure
+
+- `services/` - Web application and database migrations
+- `k6/` - Load testing scripts and results
+- `codecarbon/` - Energy measurement scripts
+- `scripts/` - Utility scripts for infrastructure management (see [scripts/README.md](scripts/README.md))
+
 ## Setup
 
 Run the following command to set up the environment:
